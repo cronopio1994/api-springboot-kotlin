@@ -2,9 +2,10 @@ package org.kotlin.repository
 
 import org.kotlin.repository.data.HotelTable
 import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 
-@Component
-interface HotelRepository: CrudRepository<HotelTable, Long> {
-    fun findById(id: Long): HotelRepository?
+@Repository
+interface HotelRepository : CrudRepository<HotelTable, Long> {
+    fun findByDeletedFalse(): List<HotelTable>
+    fun findByHotelId(hotelId: Long): HotelTable
 }
