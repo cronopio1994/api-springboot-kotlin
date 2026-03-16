@@ -5,8 +5,8 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.kotlin.models.HotelResponse
-import org.springframework.data.relational.core.mapping.Table
 
 @Entity
 @Table(name = "hotels")
@@ -15,7 +15,7 @@ data class HotelTable(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null,
     @Column(name = "name")
-    val name: String,
+    val name: String = "",
     val latitude: Double? = null,
     val longitude: Double? = null,
     var deleted: Boolean = false

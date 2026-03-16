@@ -3,6 +3,7 @@ package org.kotlin.controller
 import org.kotlin.models.HotelRequest
 import org.kotlin.models.HotelResponse
 import org.kotlin.service.HotelService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -12,21 +13,22 @@ class HotelController(
     private val hotelService: HotelService
 ) {
     @PostMapping()
-    fun createHotel(hotelRequest: HotelRequest): ResponseEntity<HotelResponse> {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    fun createHotel( @RequestBody hotelRequest: HotelRequest): ResponseEntity<HotelResponse> {
         val createdHotel = hotelService.createHotel(hotelRequest)
-        return ResponseEntity.status(201).body(createdHotel)
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdHotel)
     }
 
     @GetMapping("/{hotelId}")
     fun getHotel(
-        @PathVariable hotelId: Long
+        @PathVariable hotelId: Int
     ): ResponseEntity<HotelResponse> {
         return ResponseEntity.ok(hotelService.getHotelById(hotelId))
     }
 
     @DeleteMapping("/{hotelId}")
     fun deleteHotel(
-        @PathVariable hotelId: Long
+        @PathVariable hotelId: Int
     ): ResponseEntity<Unit> {
         hotelService.deleteHotelById(hotelId)
         return ResponseEntity.noContent().build()
