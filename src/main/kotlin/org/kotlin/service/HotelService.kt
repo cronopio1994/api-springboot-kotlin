@@ -5,6 +5,7 @@ import org.kotlin.models.HotelRequest
 import org.kotlin.models.HotelResponse
 import org.kotlin.repository.HotelRepository
 import org.kotlin.repository.data.HotelTable
+import org.kotlin.utils.DistanceCalculator
 import org.springframework.stereotype.Component
 
 @Component
@@ -36,6 +37,35 @@ class HotelService(
         val hotel = hotelRepository.findByIdAndDeletedFalse(id) ?: throw HotelNotFoundException("Hotel with id $id not found")
         hotel.deleted = true
         hotelRepository.save(hotel)
+    }
+
+    fun getAllHotels(): List<HotelResponse> {
+        return hotelRepository.getAllByDeletedFalse().map { it.toHotelResponse() }
+    }
+
+    fun findNearestHotels(
+        lat: Double,
+        lon: Double,
+        radiusKm: Double //radius from location specified
+    ): List<HotelResponse> {
+
+        val hotels = hotelRepository.findByDeletedFalse() //get all the hotels
+
+        return hotels.filter {
+            if (it.latitude != null && it.longitude != null) {
+
+                val distance = DistanceCalculator.distanceBetweenTwoPlacesInKm(
+                    lat,
+                    lon,
+                    it.latitude,
+                    it.longitude
+                )
+                distance <= radiusKm
+            } else {
+                false
+            }
+        }.map { it.toHotelResponse() }
+
     }
 
 

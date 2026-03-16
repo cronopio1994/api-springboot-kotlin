@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 interface HotelRepository : CrudRepository<HotelTable, Int> {
     fun findByIdAndDeletedFalse(id: Int): HotelTable?
     fun findByDeletedFalse(): List<HotelTable>
+    fun getAllByDeletedFalse(): List<HotelTable>
 }

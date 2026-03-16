@@ -26,6 +26,11 @@ class HotelController(
         return ResponseEntity.ok(hotelService.getHotelById(hotelId))
     }
 
+    @GetMapping
+    fun getAllHotels(): ResponseEntity<List<HotelResponse>> {
+        return ResponseEntity.ok(hotelService.getAllHotels())
+    }
+
     @DeleteMapping("/{hotelId}")
     fun deleteHotel(
         @PathVariable hotelId: Int
@@ -33,5 +38,15 @@ class HotelController(
         hotelService.deleteHotelById(hotelId)
         return ResponseEntity.noContent().build()
 
+    }
+    @GetMapping("/nearest")
+    fun getNearestHotels(
+        @RequestParam lat: Double,
+        @RequestParam lon: Double,
+        @RequestParam radius: Double
+    ): ResponseEntity<List<HotelResponse>> {
+
+        val hotels = hotelService.findNearestHotels(lat, lon, radius)
+        return ResponseEntity.ok(hotels)
     }
 }
